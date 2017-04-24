@@ -40,7 +40,7 @@ class UsuarisController extends Controller
      */
     public function store(Request $request)
     {
-        $newusuari = Usuari::create($request->all());
+       $newusuari = Usuari::create($request->all());
         return 'Done';
     }
 
