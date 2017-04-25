@@ -17,4 +17,8 @@ class Usuari extends Model
 	public function missatges() {
 		return $this->hasMany('App\Missatge'); 
 	}
+
+	public function token() {
+		return $this->belongsTo('App\Token'); 
+	}
 }

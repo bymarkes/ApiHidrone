@@ -32,3 +32,6 @@ Route::resource('api/usuaris.missatges',
 
 Route::resource('api/onlineflights',
 'OnlineFlightsController');
+
+Route::resource('api/login',
+'LoginController');

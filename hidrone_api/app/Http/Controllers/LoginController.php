@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
 use App\Usuari;
-use App\Drone;
+use App\Token;
 
-class UsuarisController extends Controller
+class LoginController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,10 +18,8 @@ class UsuarisController extends Controller
      */
     public function index()
     {
-        $usuaris = Usuari::all();
-        return response()->json(['usuaris' => $usuaris]);
+        //
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -40,8 +39,24 @@ class UsuarisController extends Controller
      */
     public function store(Request $request)
     {
-       $newusuari = Usuari::create($request->all());
-        return 'Done';
+        $usuariDB = Usuari::whereRaw('Nick = ? ', [$request->Nick])->get()->first();
+
+        if (is_null($usuariDB)) {     
+            $resposta = 'usuari incorrecte';
+        } else {
+            if ($request->Contrasenya == $usuariDB->Contrasenya) {
+
+                //generate token
+                $tokenKey = bin2hex(random_bytes(16));
+                //
+                $params = array("token"=>$tokenKey, "usuari_id"=>$usuariDB->id);
+                $token = Token::create($params);
+                $resposta = $tokenKey;
+            }else{
+                $resposta = 'incorrecte';
+            }
+        }
+        return $resposta ;
     }
 
     /**
@@ -50,10 +65,9 @@ class UsuarisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($nickname)
+    public function show($id)
     {
-        $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
-        return response()->json(['usuari' => $usuari]);
+        //
     }
 
     /**
@@ -74,11 +88,9 @@ class UsuarisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $nickname)
+    public function update(Request $request, $id)
     {
-        $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
-        $usuari->update($request->all());
-        return 'Done';
+        //
     }
 
     /**
@@ -87,16 +99,16 @@ class UsuarisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($request)
+    public function destroy($token)
     {
-        $tokenKey = Token::whereRaw('token = ? ', [$request->token])->get()->first();
+        $tokenKey = Token::whereRaw('token = ? ', [$token])->get()->first();
+
         if (is_null($tokenKey)) { 
             $resposta = 'Token Error';    
         }else{
-            $usuari = Usuari::whereRaw('Nick = ? ', [$request->nickname])->get()->first();
-            $usuari->delete();
-            
-            return 'Done';
+            $tokenKey->delete();
+            $resposta = 'logout';    
         }
+        return  $resposta ;
     }
 }
