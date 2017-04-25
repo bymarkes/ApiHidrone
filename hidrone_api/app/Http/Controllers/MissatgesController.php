@@ -74,9 +74,11 @@ class MissatgesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $nickname ,$idmissatge)
     {
-        //
+        $missatge = Missatge::find($idmissatge);
+        $missatge->update($request->all());
+        return 'Done';
     }
 
     /**
@@ -89,6 +91,6 @@ class MissatgesController extends Controller
     {
         $missatge = Missatge::find($idmissatge);
         $missatge->delete();
-         return redirect('usuaris/'.$nickname.'/missatges');
+        return redirect('Done');
     }
 }

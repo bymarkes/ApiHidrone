@@ -51,7 +51,7 @@ class OnlineFlightsController extends Controller
      */
     public function show($id)
     {
-        $onlineflights = OnlineFlight::find($id);
+       $onlineflights = OnlineFlight::find($id);
        return response()->json(['online_flight' => $onlineflights]);
     }
 
@@ -75,7 +75,9 @@ class OnlineFlightsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $onlineflights = OnlineFlight::find($id);
+        $onlineflights->update($request->all());
+        return 'Done';
     }
 
     /**
@@ -86,6 +88,8 @@ class OnlineFlightsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $onlineflight = OnlineFlight::find($id);
+        $onlineflight->delete();
+        return redirect('Done');
     }
 }

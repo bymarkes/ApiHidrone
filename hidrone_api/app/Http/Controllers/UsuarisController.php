@@ -52,7 +52,7 @@ class UsuarisController extends Controller
      */
     public function show($nickname)
     {
-        $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get();
+        $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
         return response()->json(['usuari' => $usuari]);
     }
 
@@ -74,9 +74,11 @@ class UsuarisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $nickname)
     {
-        //
+        $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
+        $usuari->update($request->all());
+        return 'Done';
     }
 
     /**
@@ -85,8 +87,11 @@ class UsuarisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($nickname)
     {
-        //
+        $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
+        //$usuari = Usuari::find($id);
+        $usuari->delete();
+        return 'Done';
     }
 }

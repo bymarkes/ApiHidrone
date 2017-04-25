@@ -50,9 +50,10 @@ class ImatgesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($idimatge)
     {
-        //
+        $imatge = Imatge::find($idimatge);
+        return response()->json(['imatge' => $imatge]);
     }
 
     /**
@@ -73,9 +74,11 @@ class ImatgesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $nickname ,$idimatge)
     {
-        //
+        $imatge = Imatge::find($idimatge);
+        $imatge->update($request->all());
+        return 'Done';
     }
 
     /**
@@ -84,8 +87,10 @@ class ImatgesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($idimatge)
     {
-        //
+        $imatge = Imatge::find($idimatge);
+        $imatge->delete();
+        return 'Done';
     }
 }

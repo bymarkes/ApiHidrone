@@ -75,9 +75,11 @@ class DronesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $nickname ,$id)
     {
-        //
+        $drone = Drone::find($id);
+        $drone->update($request->all());
+        return 'Done';
     }
 
     /**
@@ -88,6 +90,8 @@ class DronesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $drone = Drone::find($id);
+        $drone->delete();
+        return 'Done';
     }
 }

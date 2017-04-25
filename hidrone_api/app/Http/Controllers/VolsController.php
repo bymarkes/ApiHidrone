@@ -49,7 +49,7 @@ class VolsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($nickname, $droneid,$volid)
+    public function show($nickname, $droneid, $volid)
     {
         $vol = Vol::find($volid);
         return response()->json(['vol' => $vol]);
@@ -86,6 +86,8 @@ class VolsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $vol = Vol::find($id);
+        $vol->delete();
+        return redirect('Done');
     }
 }
