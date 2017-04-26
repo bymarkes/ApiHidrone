@@ -18,8 +18,14 @@ class DronesController extends Controller
     public function index($nickname)
     {
         $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
-        $drones = Usuari::find($usuari->id)->drones;
-        return response()->json(['drones' => $drones]);
+        if (!$usuari)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Usuari Not Found'])],404);
+        }else{
+            $drones = Usuari::find($usuari->id)->drones;
+           //OK
+            return response()->json(['status'=>'ok','data'=>$drones],200);
+        }
     }
 
     /**
@@ -41,7 +47,8 @@ class DronesController extends Controller
     public function store(Request $request)
     {
         $newdrone = Drone::create($request->all());
-        return 'Done';
+        //OK
+        return response()->json(['status'=>'ok'],200);
     }
 
     /**
@@ -52,9 +59,14 @@ class DronesController extends Controller
      */
     public function show($nickname, $id_drone)
     {
-        $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
-        $drone = Drone::whereRaw('id = ? and usuari_id = ?', [$id_drone, $usuari->id])->get();
-        return response()->json(['drone' => $drone]);
+        $drone = Drone::find($id_drone);
+        if (!$drone)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Drone Not Found'])],404);
+        }else{
+           //OK
+            return response()->json(['status'=>'ok','data'=>$drone],200);
+        }
     }
 
     /**
@@ -78,8 +90,14 @@ class DronesController extends Controller
     public function update(Request $request, $nickname ,$id)
     {
         $drone = Drone::find($id);
-        $drone->update($request->all());
-        return 'Done';
+        if (!$drone)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Drone Not Found'])],404);
+        }else{
+             $drone->update($request->all());
+           //OK
+            return response()->json(['status'=>'ok'],200);
+        }
     }
 
     /**
@@ -91,7 +109,13 @@ class DronesController extends Controller
     public function destroy($id)
     {
         $drone = Drone::find($id);
-        $drone->delete();
-        return 'Done';
+        if (!$drone)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Drone Not Found'])],404);
+        }else{
+            $drone->delete();
+           //OK
+            return response()->json(['status'=>'ok'],200);
+        }
     }
 }

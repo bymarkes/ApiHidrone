@@ -18,8 +18,14 @@ class MissatgesController extends Controller
     public function index($nickname)
     {
         $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
-        $missatges = Usuari::find($usuari->id)->missatges;
-        return response()->json(['missatges' => $missatges]);
+        if (!$usuari)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Usuari Not Found'])],404);
+        }else{
+            $missatges = Usuari::find($usuari->id)->missatges;
+           //OK
+            return response()->json(['status'=>'ok','data'=>$missatges],200);
+        }
     }
 
     /**
@@ -41,7 +47,8 @@ class MissatgesController extends Controller
     public function store(Request $request)
     {
         $newmissatge = Missatge::create($request->all());
-        return 'Done';
+        //OK
+        return response()->json(['status'=>'ok'],200);
     }
 
     /**
@@ -53,7 +60,13 @@ class MissatgesController extends Controller
     public function show($nickname, $idmissatge)
     {
         $missatge = Missatge::find($idmissatge);
-        return response()->json(['missatge' => $missatge]);
+        if (!$missatge)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Missatge Not Found'])],404);
+        }else{
+           //OK
+            return response()->json(['status'=>'ok','data'=>$missatge],200);
+        }
     }
 
     /**
@@ -77,8 +90,14 @@ class MissatgesController extends Controller
     public function update(Request $request, $nickname ,$idmissatge)
     {
         $missatge = Missatge::find($idmissatge);
-        $missatge->update($request->all());
-        return 'Done';
+        if (!$missatge)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Missatge Not Found'])],404);
+        }else{
+            $missatge->update($request->all());
+             //OK
+            return response()->json(['status'=>'ok'],200);
+        }
     }
 
     /**
@@ -90,7 +109,13 @@ class MissatgesController extends Controller
     public function destroy($nickname, $idmissatge)
     {
         $missatge = Missatge::find($idmissatge);
-        $missatge->delete();
-        return redirect('Done');
+        if (!$missatge)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Missatge Not Found'])],404);
+        }else{
+            $missatge->delete();
+            //OK
+            return response()->json(['status'=>'ok'],200);
+        }
     }
 }

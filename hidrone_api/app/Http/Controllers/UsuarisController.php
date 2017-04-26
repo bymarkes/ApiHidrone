@@ -18,7 +18,8 @@ class UsuarisController extends Controller
     public function index()
     {
         $usuaris = Usuari::all();
-        return response()->json(['usuaris' => $usuaris]);
+        //OK
+        return response()->json(['status'=>'ok','data'=>$usuaris],200);
     }
 
 
@@ -41,7 +42,9 @@ class UsuarisController extends Controller
     public function store(Request $request)
     {
        $newusuari = Usuari::create($request->all());
-        return 'Done';
+       
+       //OK
+       return response()->json(['status'=>'ok'],200);
     }
 
     /**
@@ -53,7 +56,13 @@ class UsuarisController extends Controller
     public function show($nickname)
     {
         $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
-        return response()->json(['usuari' => $usuari]);
+        if (!$usuari)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Usuari Not Found'])],404);
+        }else{
+           //OK
+            return response()->json(['status'=>'ok','data'=>$usuari],200);
+        }
     }
 
     /**
@@ -77,8 +86,14 @@ class UsuarisController extends Controller
     public function update(Request $request, $nickname)
     {
         $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
-        $usuari->update($request->all());
-        return 'Done';
+        if (!$usuari)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Usuari Not Found'])],404);
+        }else{
+            $usuari->update($request->all());
+           //OK
+            return response()->json(['status'=>'ok','data'=>$usuari],200);
+        }
     }
 
     /**
@@ -90,13 +105,18 @@ class UsuarisController extends Controller
     public function destroy($request)
     {
         $tokenKey = Token::whereRaw('token = ? ', [$request->token])->get()->first();
-        if (is_null($tokenKey)) { 
-            $resposta = 'Token Error';    
+        if (!$tokenKey) { 
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Bad Token'])],404);
         }else{
-            $usuari = Usuari::whereRaw('Nick = ? ', [$request->nickname])->get()->first();
-            $usuari->delete();
-            
-            return 'Done';
+            $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
+            if (!$usuari)
+            {
+                return response()->json(['errors'=>array(['code'=>404,'message'=>'Usuari Not Found'])],404);
+            }else{
+                $usuari->delete();
+               //OK
+                return response()->json(['status'=>'ok'],200);
+            }
         }
     }
 }

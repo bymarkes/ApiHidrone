@@ -18,7 +18,14 @@ class VolsController extends Controller
     public function index($nickname, $droneid)
     {
         $vols = Drone::find($droneid)->vols;
-        return response()->json(['vols' => $vols]);
+
+        if (!$vols)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Drone Not Found'])],404);
+        }else{
+           //OK
+            return response()->json(['status'=>'ok','data'=>$vols],200);
+        }
     }
 
     /**
@@ -40,7 +47,7 @@ class VolsController extends Controller
     public function store(Request $request)
     {
         $newVol = Vol::create($request->all());
-        return 'Done';
+        return response()->json(['status'=>'ok'],200);
     }
 
     /**
@@ -52,7 +59,13 @@ class VolsController extends Controller
     public function show($nickname, $droneid, $volid)
     {
         $vol = Vol::find($volid);
-        return response()->json(['vol' => $vol]);
+        if (!$vol)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Vol Not Found'])],404);
+        }else{
+           //OK
+            return response()->json(['status'=>'ok','data'=>$vol],200);
+        }
     }
 
     /**
@@ -85,9 +98,15 @@ class VolsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
+    {     
         $vol = Vol::find($id);
-        $vol->delete();
-        return redirect('Done');
+        if (!$vol)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Vol Not Found'])],404);
+        }else{
+            $vol->delete();
+           //OK
+            return response()->json(['status'=>'ok'],200);
+        }
     }
 }

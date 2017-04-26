@@ -18,8 +18,14 @@ class ImatgesController extends Controller
     public function index($nickname)
     {
         $usuari = Usuari::whereRaw('Nick = ? ', [$nickname])->get()->first();
-        $imatges = Usuari::find($usuari->id)->imatges;
-        return response()->json(['imatges' => $imatges]);
+        if (!$usuari)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Usuari Not Found'])],404);
+        }else{
+            $imatges = Usuari::find($usuari->id)->imatges;
+           //OK
+            return response()->json(['status'=>'ok','data'=>$imatges],200);
+        }
     }
 
     /**
@@ -41,7 +47,8 @@ class ImatgesController extends Controller
     public function store(Request $request)
     {
         $newimage = Imatge::create($request->all());
-        return 'Done';
+        //OK
+        return response()->json(['status'=>'ok'],200);
     }
 
     /**
@@ -53,7 +60,13 @@ class ImatgesController extends Controller
     public function show($idimatge)
     {
         $imatge = Imatge::find($idimatge);
-        return response()->json(['imatge' => $imatge]);
+        if (!$imatge)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Imatge Not Found'])],404);
+        }else{
+           //OK
+            return response()->json(['status'=>'ok','data'=>$imatge],200);
+        }
     }
 
     /**
@@ -77,8 +90,14 @@ class ImatgesController extends Controller
     public function update(Request $request, $nickname ,$idimatge)
     {
         $imatge = Imatge::find($idimatge);
-        $imatge->update($request->all());
-        return 'Done';
+        if (!$imatge)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Imatge Not Found'])],404);
+        }else{
+            $imatge->update($request->all());
+           //OK
+            return response()->json(['status'=>'ok'],200);
+        }
     }
 
     /**
@@ -90,7 +109,13 @@ class ImatgesController extends Controller
     public function destroy($idimatge)
     {
         $imatge = Imatge::find($idimatge);
-        $imatge->delete();
-        return 'Done';
+        if (!$imatge)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Imatge Not Found'])],404);
+        }else{
+            $imatge->delete();
+           //OK
+            return response()->json(['status'=>'ok'],200);
+        }
     }
 }

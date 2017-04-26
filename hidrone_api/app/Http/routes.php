@@ -15,23 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('api/usuaris',
-'UsuarisController');
+Route::resource('api/usuaris', 'UsuarisController', ['except'=>['create','edit']]);
 
-Route::resource('api/usuaris.drones',
-'DronesController');
+Route::resource('api/usuaris.drones', 'DronesController', ['except'=>['create','edit']]);
 
-Route::resource('api/usuaris.drones.vol',
-'VolsController');
+Route::resource('api/usuaris.drones.vol', 'VolsController', ['except'=>['create','edit','update']]);
 
-Route::resource('api/usuaris.imatges',
-'ImatgesController');
+Route::resource('api/usuaris.imatges','ImatgesController', ['except'=>['create','edit']]);
 
-Route::resource('api/usuaris.missatges',
-'MissatgesController');
+Route::resource('api/usuaris.missatges','MissatgesController', ['except'=>['create','edit']]);
 
-Route::resource('api/onlineflights',
-'OnlineFlightsController');
+Route::resource('api/onlineflights', 'OnlineFlightsController', ['except'=>['create','edit']]);
 
-Route::resource('api/login',
-'LoginController');
+Route::resource('api/login', 'LoginController', ['only'=>['store','destroy']]);

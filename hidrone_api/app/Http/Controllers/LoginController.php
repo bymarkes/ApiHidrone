@@ -41,22 +41,25 @@ class LoginController extends Controller
     {
         $usuariDB = Usuari::whereRaw('Nick = ? ', [$request->Nick])->get()->first();
 
-        if (is_null($usuariDB)) {     
-            $resposta = 'usuari incorrecte';
+        if (is_null($usuariDB)) {   
+            //User not found 
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No es troba Usuari amb aquest Nick.'])],404);
         } else {
             if ($request->Contrasenya == $usuariDB->Contrasenya) {
 
                 //generate token
                 $tokenKey = bin2hex(random_bytes(16));
-                //
+                
                 $params = array("token"=>$tokenKey, "usuari_id"=>$usuariDB->id);
                 $token = Token::create($params);
-                $resposta = $tokenKey;
+
+                //OK
+                return response()->json(['status'=>'ok','data'=>$tokenKey],200);
             }else{
-                $resposta = 'incorrecte';
+                //Password incorrect
+               return response()->json(['errors'=>array(['code'=>404,'message'=>'Incorrect password.'])],404);
             }
         }
-        return $resposta ;
     }
 
     /**
@@ -104,11 +107,10 @@ class LoginController extends Controller
         $tokenKey = Token::whereRaw('token = ? ', [$token])->get()->first();
 
         if (is_null($tokenKey)) { 
-            $resposta = 'Token Error';    
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Incorrect token.'])],404);  
         }else{
             $tokenKey->delete();
-            $resposta = 'logout';    
+            return response()->json(['status'=>'ok'],200);
         }
-        return  $resposta ;
     }
 }

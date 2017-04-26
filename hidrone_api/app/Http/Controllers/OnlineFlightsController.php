@@ -18,7 +18,9 @@ class OnlineFlightsController extends Controller
     public function index()
     {
        $onlineflights = OnlineFlight::all();
-       return response()->json(['online_flights' => $onlineflights]);
+       
+       //OK
+       return response()->json(['status'=>'ok','data'=>$onlineflights],200);
     }
 
     /**
@@ -40,7 +42,9 @@ class OnlineFlightsController extends Controller
     public function store(Request $request)
     {
         $newOnlineFlight = OnlineFlight::create($request->all());
-        return 'Done';
+        
+        //OK
+        return response()->json(['status'=>'ok'],200); 
     }
 
     /**
@@ -51,8 +55,15 @@ class OnlineFlightsController extends Controller
      */
     public function show($id)
     {
-       $onlineflights = OnlineFlight::find($id);
-       return response()->json(['online_flight' => $onlineflights]);
+       $onlineflight = OnlineFlight::find($id);
+
+        if (!$onlineflight)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'OnlineFlight Not Found'])],404);
+        }else{
+            //OK
+            return response()->json(['status'=>'ok','data'=>$onlineflight],200);
+        }
     }
 
     /**
@@ -76,8 +87,15 @@ class OnlineFlightsController extends Controller
     public function update(Request $request, $id)
     {
         $onlineflights = OnlineFlight::find($id);
-        $onlineflights->update($request->all());
-        return 'Done';
+
+        if (!$onlineflights)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'OnlineFlight Not Found'])],404);
+        }else{
+            $onlineflights->update($request->all());
+            //OK
+            return response()->json(['status'=>'ok'],200); 
+        }
     }
 
     /**
@@ -89,7 +107,13 @@ class OnlineFlightsController extends Controller
     public function destroy($id)
     {
         $onlineflight = OnlineFlight::find($id);
-        $onlineflight->delete();
-        return redirect('Done');
+        if (!$onlineflights)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'OnlineFlight Not Found'])],404);
+        }else{
+            $onlineflights->delete();
+            //OK
+            return response()->json(['status'=>'ok'],200); 
+        }
     }
 }
