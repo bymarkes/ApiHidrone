@@ -2,7 +2,13 @@
 <html>
     <head>
         <title>Laravel</title>
-
+        
+        <meta charset="utf-8">
+        
+        <title>hiDrone</title>
+        
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700">
+        
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
         <style>
@@ -11,35 +17,25 @@
             }
 
             body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
+               background: #05272E;
+               color: #606468;
+               font: 87.5%/1.5em 'Open Sans', sans-serif;
+               margin: 0;
             }
 
             .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 96px;
+                left: 50%;
+                position: fixed;
+                top: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Laravel 5</div>
-            </div>
-        </div>
-    </body>
+      <div class="container">
+        <img src="loginLogoFinal.png" alt="hiDrone Logo" style="width:250px;">
+      </div>
+  </body>
 </html>
